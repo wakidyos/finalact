@@ -62,7 +62,7 @@
     const formData = new FormData(form);
 let allValid = true;
 
-// Loop through required fields to check if empty
+
 for (const [key, value] of formData.entries()) {
   if (!value.trim()) {
     responseMsg.innerText = `❌ Please fill in the ${key} field.`;
