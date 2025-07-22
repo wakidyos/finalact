@@ -51,26 +51,43 @@
     <button id="themeToggle">🌙 Toggle Dark Mode</button>
   </footer>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyw2frr_y0iNRvRievL6KXMvbaoMwfSA15PNYnoEm7W7oHyeGOmLY36Qylk0_CN0E9S/exec";
-    const form = document.getElementById("contactForm");
-    const responseMsg = document.getElementById("responseMsg");
+ <script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyw2frr_y0iNRvRievL6KXMvbaoMwfSA15PNYnoEm7W7oHyeGOmLY36Qylk0_CN0E9S/exec";
+  const form = document.getElementById("contactForm");
+  const responseMsg = document.getElementById("responseMsg");
 
-    form.addEventListener("submit", e => {
-      e.preventDefault();
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-      fetch(scriptURL, { method: "POST", body: new FormData(form) })
-        .then(response => {
+    const formData = new FormData(form);
+    let allValid = true;
+
+    
+    for (const [key, value] of formData.entries()) {
+      if (!value.trim()) {
+        responseMsg.innerText = `❌ Please fill in the "${key}" field.`;
+        responseMsg.style.color = "red";
+        allValid = false;
+        break;
+      }
+    }
+
+    
+    if (allValid) {
+      fetch(scriptURL, { method: "POST", body: formData })
+        .then(() => {
           responseMsg.innerText = "✅ Message sent successfully!";
           responseMsg.style.color = "green";
           form.reset();
         })
-        .catch(error => {
+        .catch(() => {
           responseMsg.innerText = "❌ Failed to send message. Please try again.";
           responseMsg.style.color = "red";
         });
-    });
-  </script>
+    }
+  });
+</script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
