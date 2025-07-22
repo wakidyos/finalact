@@ -59,7 +59,32 @@
     form.addEventListener("submit", e => {
       e.preventDefault();
 
-      fetch(scriptURL, { method: "POST", body: new FormData(form) })
+    const formData = new FormData(form);
+let allValid = true;
+
+// Loop through required fields to check if empty
+for (const [key, value] of formData.entries()) {
+  if (!value.trim()) {
+    responseMsg.innerText = `❌ Please fill in the ${key} field.`;
+    responseMsg.style.color = "red";
+    allValid = false;
+    break;
+  }
+}
+
+if (allValid) {
+  fetch(scriptURL, { method: "POST", body: formData })
+    .then(response => {
+      responseMsg.innerText = "✅ Message sent successfully!";
+      responseMsg.style.color = "green";
+      form.reset();
+    })
+    .catch(error => {
+      responseMsg.innerText = "❌ Failed to send message. Please try again.";
+      responseMsg.style.color = "red";
+    });
+}
+
         .then(response => {
           responseMsg.innerText = "✅ Message sent successfully!";
           responseMsg.style.color = "green";
